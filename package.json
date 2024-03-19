@@ -3,6 +3,10 @@
   "displayName": "Eam Talon",
   "description": "VS Code command interface for Talon Voice scripts.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/downscore/eam-talon-vscode"
+  },
   "icon": "images/icon.png",
   "version": "0.0.1",
   "engines": {
