@@ -1,26 +1,20 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+import * as commandRunner from "./command_runner";
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "eam-talon" is now active!');
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('eam-talon.runCommand', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Eam Talon!');
-	});
+// Function called when the extension activates.
+// This extension should activate immediately when visual studios opens so it can create the communication directory
+// if necessary.
+export async function activate(context: vscode.ExtensionContext) {
+  console.log('Activating eam-talon extension.');
 
-	context.subscriptions.push(disposable);
+  // Initialize the command runner. This will create the communication directory if it does not exist.
+  await commandRunner.initialize();
+
+  // Define available commands.
+  context.subscriptions.push(vscode.commands.registerCommand('eam-talon.runCommand', commandRunner.runCommand));
 }
 
-// This method is called when your extension is deactivated
-export function deactivate() {}
+// Function called when the extension is deactivated.
+export function deactivate() { }
