@@ -36,6 +36,14 @@
       {
         "command": "eam-talon.copyLinesToCursor",
         "title": "Copies the given line range to the cursor. Line numbers are 1-based and inclusive."
+      },
+      {
+        "command": "eam-talon.setSelection",
+        "title": "Sets the current selection range. Offsets are 0-based."
+      },
+      {
+        "command": "eam-talon.getTextFlowContext",
+        "title": "Returns the context required to run TextFlow commands."
       }
     ],
     "keybindings": [

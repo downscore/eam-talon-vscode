@@ -83,6 +83,50 @@ function copyLinesToCursor(lineFrom: number, lineTo?: number) {
   console.log(`Copied lines: ${lineFrom} to ${effectiveLineTo}`);
 }
 
+// Selects the given offset range. Input offsets are 0-based.
+function setSelection(offsetFrom: number, offsetTo: number) {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    return;
+  }
+
+  const start = editor.document.positionAt(offsetFrom);
+  const end = editor.document.positionAt(offsetTo);
+  const selection = new vscode.Selection(start, end);
+  editor.selection = selection;
+  editor.revealRange(selection);
+}
+
+// Returns an object containing required context for TextFlow.
+function getTextFlowContext() {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    throw Error("No active text editor");
+  }
+
+  // Get the current selection range as offsets into the file.
+  const selection = editor.selection;
+  const selectionStartOffset = editor.document.offsetAt(selection.start);
+  const selectionEndOffset = editor.document.offsetAt(selection.end);
+
+  // Get text around the selection.
+  // Note: Selected text does not count towards the max text length.
+  const MaxTextLength = 20000;
+  const textStartOffset = Math.max(0, selectionStartOffset - (MaxTextLength / 2));
+  const textEndOffset = Math.min(editor.document.getText().length, selectionEndOffset + (MaxTextLength / 2));
+  const text = editor.document.getText(new vscode.Range(
+    editor.document.positionAt(textStartOffset),
+    editor.document.positionAt(textEndOffset)
+  ));
+
+  return {
+    text,
+    selectionStartOffset,
+    selectionEndOffset,
+    textStartOffset
+  };
+}
+
 
 // Function called when the extension activates.
 // This extension should activate immediately when visual studios opens so it can create the communication directory
@@ -98,7 +142,9 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('eam-talon.runCommand', commandRunner.runCommand),
     vscode.commands.registerCommand('eam-talon.jumpToLine', jumpToLine),
     vscode.commands.registerCommand('eam-talon.selectLineRange', selectLineRange),
-    vscode.commands.registerCommand('eam-talon.copyLinesToCursor', copyLinesToCursor)
+    vscode.commands.registerCommand('eam-talon.copyLinesToCursor', copyLinesToCursor),
+    vscode.commands.registerCommand('eam-talon.setSelection', setSelection),
+    vscode.commands.registerCommand('eam-talon.getTextFlowContext', getTextFlowContext)
   );
 }
 
