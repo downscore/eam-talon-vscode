@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 
 import { S_IWOTH } from "constants";
 import { mkdirSync, lstatSync } from "fs";
-import { FileHandle, open, readFile, stat } from "fs/promises";
+import { open, readFile, stat } from "fs/promises";
 import { tmpdir, userInfo } from "os";
 import { join } from "path";
 
