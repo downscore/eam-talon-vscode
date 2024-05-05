@@ -127,6 +127,17 @@ function getTextFlowContext() {
   };
 }
 
+// Get the path to the currently-open file.
+function getFilename() {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    throw Error("No active text editor");
+  }
+  if (editor.document.uri.scheme !== 'file') {
+    throw Error("Document URI scheme is not 'file'");
+  }
+  return editor.document.fileName;
+}
 
 // Function called when the extension activates.
 // This extension should activate immediately when visual studios opens so it can create the communication directory
@@ -144,7 +155,8 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('eam-talon.selectLineRange', selectLineRange),
     vscode.commands.registerCommand('eam-talon.copyLinesToCursor', copyLinesToCursor),
     vscode.commands.registerCommand('eam-talon.setSelection', setSelection),
-    vscode.commands.registerCommand('eam-talon.getTextFlowContext', getTextFlowContext)
+    vscode.commands.registerCommand('eam-talon.getTextFlowContext', getTextFlowContext),
+    vscode.commands.registerCommand('eam-talon.getFilename', getFilename),
   );
 }
 
