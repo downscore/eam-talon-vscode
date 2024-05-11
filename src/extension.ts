@@ -139,6 +139,20 @@ function getFilename() {
   return editor.document.fileName;
 }
 
+// Get the currently selected text.
+// By default, copying with an empty selection copies the entire line to the clipboard. This makes it hard to determine
+// if the selection actually is empty. This function will return an empty string of nothing is selected.
+function getSelectedText() {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    throw Error("No active text editor");
+  }
+  if (editor.selection.isEmpty) {
+    return "";
+  }
+  return editor.document.getText(editor.selection);
+}
+
 // Function called when the extension activates.
 // This extension should activate immediately when visual studios opens so it can create the communication directory
 // if necessary.
@@ -157,6 +171,7 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('eam-talon.setSelection', setSelection),
     vscode.commands.registerCommand('eam-talon.getTextFlowContext', getTextFlowContext),
     vscode.commands.registerCommand('eam-talon.getFilename', getFilename),
+    vscode.commands.registerCommand('eam-talon.getSelectedText', getSelectedText),
   );
 }
 
