@@ -48,6 +48,18 @@
       {
         "command": "eam-talon.getFilename",
         "title": "Returns the path of the currently-open file."
+      },
+      {
+        "command": "eam-talon.getSelectedText",
+        "title": "Returns the currently-selected text. Returns empty string if the selection is empty."
+      },
+      {
+        "command": "eam-talon.insertNewLineAbove",
+        "title": "Inserts a new line above the given line number without moving the cursor."
+      },
+      {
+        "command": "eam-talon.insertNewLineBelow",
+        "title": "Inserts a new line below the given line number without moving the cursor."
       }
     ],
     "keybindings": [

@@ -153,6 +153,34 @@ function getSelectedText() {
   return editor.document.getText(editor.selection);
 }
 
+// Inserts a new line above the given line number. Input line numbers are 1-based.
+function insertNewLineAbove(lineNumber: number) {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    throw Error("No active text editor");
+  }
+
+  // Line numbers are 0-based in the API.
+  const position = editor.document.lineAt(lineNumber - 1).range.start;
+  editor.edit(builder => {
+    builder.insert(position, '\n');
+  });
+}
+
+// Inserts a new line below the given line number. Input line numbers are 1-based.
+function insertNewLineBelow(lineNumber: number) {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    throw Error("No active text editor");
+  }
+
+  // Line numbers are 0-based in the API.
+  const position = editor.document.lineAt(lineNumber - 1).range.end;
+  editor.edit(builder => {
+    builder.insert(position, '\n');
+  });
+}
+
 // Function called when the extension activates.
 // This extension should activate immediately when visual studios opens so it can create the communication directory
 // if necessary.
@@ -172,6 +200,8 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('eam-talon.getTextFlowContext', getTextFlowContext),
     vscode.commands.registerCommand('eam-talon.getFilename', getFilename),
     vscode.commands.registerCommand('eam-talon.getSelectedText', getSelectedText),
+    vscode.commands.registerCommand('eam-talon.insertNewLineAbove', insertNewLineAbove),
+    vscode.commands.registerCommand('eam-talon.insertNewLineBelow', insertNewLineBelow),
   );
 }
 
