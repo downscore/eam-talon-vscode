@@ -31,9 +31,9 @@ function jumpToLine(line: number) {
 
 // Selects a range of lines. Input line numbers are 1-based.
 // If lineTo is not provided, only lineFrom will be selected.
-function selectLineRange(lineFrom: number, lineTo?: number) {
+function selectLineRangeIncludingLineBreak(lineFrom: number, lineTo?: number) {
   const effectiveLineTo = lineTo || lineFrom;
-  console.log(`Selecting lines: ${lineFrom} to ${effectiveLineTo}`);
+  console.log(`Selecting lines including line break: ${lineFrom} to ${effectiveLineTo}`);
 
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
@@ -51,7 +51,37 @@ function selectLineRange(lineFrom: number, lineTo?: number) {
   editor.selection = selection;
   editor.revealRange(selection);
 
-  console.log(`Selected lines: ${lineFrom} to ${effectiveLineTo}`);
+  console.log(`Selected lines including line break: ${lineFrom} to ${effectiveLineTo}`);
+}
+
+// Selects a range of lines. Input line numbers are 1-based.
+// If lineTo is not provided, only lineFrom will be selected.
+function selectLineRangeForEditing(lineFrom: number, lineTo?: number) {
+  const effectiveLineTo = lineTo || lineFrom;
+  console.log(`Selecting lines for editing: ${lineFrom} to ${effectiveLineTo}`);
+
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    return;
+  }
+
+  // Defer to selection including line break if there is more than one line to select.
+  if (effectiveLineTo !== lineFrom) {
+    selectLineRangeIncludingLineBreak(lineFrom, effectiveLineTo);
+    return;
+  }
+
+  // Select one line without including the leading indentation or trailing line break if present.
+  // Note: trailing line break will not be present on the last line of the document.
+  const document = editor.document;
+  const line = document.lineAt(lineFrom - 1);
+  const start = new vscode.Position(line.lineNumber, line.firstNonWhitespaceCharacterIndex);
+  const end = line.range.end;
+  const selection = new vscode.Selection(start, end);
+  editor.selection = selection;
+  editor.revealRange(selection);
+
+  console.log(`Selected line for editing: ${lineFrom}`);
 }
 
 // Copies the contents of a range of lines to the cursor location. Input line numbers are 1-based.
@@ -79,6 +109,11 @@ function copyLinesToCursor(lineFrom: number, lineTo?: number) {
   editor.edit(builder => {
     builder.insert(cursorPosition, text);
   });
+
+  // Scroll the editor to the end of the inserted text.
+  const insertedEnd = new vscode.Position(cursorPosition.line + effectiveLineTo - lineFrom, 0);
+  const selection = new vscode.Selection(insertedEnd, insertedEnd);
+  editor.revealRange(selection, vscode.TextEditorRevealType.Default);
 
   console.log(`Copied lines: ${lineFrom} to ${effectiveLineTo}`);
 }
@@ -194,7 +229,8 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand('eam-talon.runCommand', commandRunner.runCommand),
     vscode.commands.registerCommand('eam-talon.jumpToLine', jumpToLine),
-    vscode.commands.registerCommand('eam-talon.selectLineRange', selectLineRange),
+    vscode.commands.registerCommand('eam-talon.selectLineRangeIncludingLineBreak', selectLineRangeIncludingLineBreak),
+    vscode.commands.registerCommand('eam-talon.selectLineRangeForEditing', selectLineRangeForEditing),
     vscode.commands.registerCommand('eam-talon.copyLinesToCursor', copyLinesToCursor),
     vscode.commands.registerCommand('eam-talon.setSelection', setSelection),
     vscode.commands.registerCommand('eam-talon.getTextFlowContext', getTextFlowContext),

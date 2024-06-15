@@ -30,8 +30,12 @@
         "title": "Jumps to the given line number. Line numbers are 1-based."
       },
       {
-        "command": "eam-talon.selectLineRange",
-        "title": "Selects the given line range. Line numbers are 1-based and inclusive."
+        "command": "eam-talon.selectLineRangeIncludingLineBreak",
+        "title": "Selects the given line range including trailing line breaks. Line numbers are 1-based and inclusive."
+      },
+      {
+        "command": "eam-talon.selectLineRangeForEditing",
+        "title": "Selects the given line range for editing. Line numbers are 1-based and inclusive."
       },
       {
         "command": "eam-talon.copyLinesToCursor",
