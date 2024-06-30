@@ -64,6 +64,10 @@
       {
         "command": "eam-talon.insertNewLineBelow",
         "title": "Inserts a new line below the given line number without moving the cursor."
+      },
+      {
+        "command": "eam-talon.insertSnippet",
+        "title": "Inserts the given text as a snippet string in the active editor."
       }
     ],
     "keybindings": [

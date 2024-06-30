@@ -216,6 +216,17 @@ function insertNewLineBelow(lineNumber: number) {
   });
 }
 
+// Inserts the given string as a snippet in the active editor.
+function insertSnippet(snippetBody: string) {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    throw Error("No active text editor");
+  }
+
+  const snippet = new vscode.SnippetString(snippetBody);
+  editor.insertSnippet(snippet);
+}
+
 // Function called when the extension activates.
 // This extension should activate immediately when visual studios opens so it can create the communication directory
 // if necessary.
@@ -238,6 +249,7 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('eam-talon.getSelectedText', getSelectedText),
     vscode.commands.registerCommand('eam-talon.insertNewLineAbove', insertNewLineAbove),
     vscode.commands.registerCommand('eam-talon.insertNewLineBelow', insertNewLineBelow),
+    vscode.commands.registerCommand('eam-talon.insertSnippet', insertSnippet),
   );
 }
 
