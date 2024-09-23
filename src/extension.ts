@@ -132,8 +132,8 @@ function setSelection(offsetFrom: number, offsetTo: number) {
   editor.revealRange(selection);
 }
 
-// Returns an object containing required context for TextFlow.
-function getTextFlowContext() {
+// Returns an object containing editor context.
+function getEditorContext() {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
     throw Error("No active text editor");
@@ -244,7 +244,7 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('eam-talon.selectLineRangeForEditing', selectLineRangeForEditing),
     vscode.commands.registerCommand('eam-talon.copyLinesToCursor', copyLinesToCursor),
     vscode.commands.registerCommand('eam-talon.setSelection', setSelection),
-    vscode.commands.registerCommand('eam-talon.getTextFlowContext', getTextFlowContext),
+    vscode.commands.registerCommand('eam-talon.getEditorContext', getEditorContext),
     vscode.commands.registerCommand('eam-talon.getFilename', getFilename),
     vscode.commands.registerCommand('eam-talon.getSelectedText', getSelectedText),
     vscode.commands.registerCommand('eam-talon.insertNewLineAbove', insertNewLineAbove),

@@ -46,8 +46,8 @@
         "title": "Sets the current selection range. Offsets are 0-based."
       },
       {
-        "command": "eam-talon.getTextFlowContext",
-        "title": "Returns the context required to run TextFlow commands."
+        "command": "eam-talon.getEditorContext",
+        "title": "Returns the current editor context, including the cursor position and surrounding text."
       },
       {
         "command": "eam-talon.getFilename",
